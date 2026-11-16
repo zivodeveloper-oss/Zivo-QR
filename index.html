@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#07111f">
+<title>Zivo QR — AURA ZIVO</title>
+<style>
+:root{color-scheme:dark;--bg:#050b14;--panel:#0b1727;--panel2:#101f32;--cyan:#42e8ff;--text:#edf8ff;--muted:#9db2c7;--line:#1d3449}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 0%,#102a43 0%,var(--bg) 60%);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+.wrap{width:min(920px,100%);margin:auto;padding:28px 18px 48px}
+header{display:flex;align-items:center;gap:12px;margin:8px 0 38px}
+.logo{width:44px;height:44px;border:1px solid #2c839a;border-radius:14px;display:grid;place-items:center;color:var(--cyan);font-weight:900;box-shadow:0 0 24px #42e8ff22}
+.brand{font-weight:800;letter-spacing:.12em;font-size:14px}.brand small{display:block;color:var(--muted);font-size:11px;letter-spacing:.2em;margin-top:4px}
+h1{font-size:clamp(34px,7vw,56px);line-height:1.02;margin:0 0 12px;letter-spacing:-.04em}
+h1 span{color:var(--cyan);text-shadow:0 0 24px #42e8ff33}
+.intro{color:var(--muted);line-height:1.6;max-width:620px;margin:0 0 28px}
+.layout{display:grid;grid-template-columns:1.15fr .85fr;gap:18px}
+.card{background:linear-gradient(145deg,#0d1b2cdd,#081321ee);border:1px solid var(--line);border-radius:22px;padding:22px;box-shadow:0 18px 55px #0003}
+label{display:block;font-size:13px;color:#c8d8e8;font-weight:650;margin-bottom:9px}
+textarea,input,select{width:100%;background:#050d18;border:1px solid #254057;border-radius:12px;color:var(--text);padding:13px 14px;font:inherit;outline:none}
+textarea{min-height:135px;resize:vertical;line-height:1.5}
+textarea:focus,input:focus,select:focus{border-color:var(--cyan);box-shadow:0 0 0 3px #42e8ff17}
+.field{margin-bottom:18px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+button,.download{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:12px;padding:13px 16px;font:inherit;font-weight:800;cursor:pointer;text-decoration:none;transition:transform .15s,opacity .15s}
+button:hover,.download:hover{transform:translateY(-1px)}button:active,.download:active{transform:translateY(0)}
+.primary{width:100%;background:var(--cyan);color:#04101a;box-shadow:0 6px 24px #42e8ff20}
+.secondary{background:#13273b;border:1px solid #29455e;color:var(--text)}
+.actions{display:flex;gap:10px;margin-top:12px}.actions>*{flex:1}
+.preview{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100%;text-align:center}
+.qrbox{background:white;border-radius:18px;padding:16px;min-width:230px;min-height:230px;display:grid;place-items:center;margin:14px 0 18px;box-shadow:0 0 40px #42e8ff12}
+#qrcode canvas,#qrcode img{display:block;max-width:100%;height:auto}
+.placeholder{color:#657b8f;font-size:13px;max-width:180px;line-height:1.5}
+.status{color:var(--muted);font-size:13px;line-height:1.5;min-height:20px}
+footer{text-align:center;color:#6f879c;font-size:12px;margin-top:30px}
+@media(max-width:700px){.layout{grid-template-columns:1fr}.preview{min-height:340px}.wrap{padding-top:18px}.card{padding:18px}header{margin-bottom:30px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><div class="logo">Z</div><div class="brand">AURA ZIVO<small>TOOLS FOR EVERYDAY TECH</small></div></header>
+<main>
+<h1>Make it a <span>QR.</span></h1>
+<p class="intro">Turn text, links, and useful information into a QR code in seconds. Create it, scan-test it, and download it.</p>
+<div class="layout">
+<section class="card">
+<div class="field">
+<label for="content">Text or website link</label>
+<textarea id="content" maxlength="2500" placeholder="https://example.com&#10;or type any text here..."></textarea>
+</div>
+<div class="row">
+<div class="field"><label for="size">QR size</label><select id="size"><option value="200">Small · 200 px</option><option value="280" selected>Medium · 280 px</option><option value="360">Large · 360 px</option><option value="480">XL · 480 px</option></select></div>
+<div class="field"><label for="color">QR color</label><select id="color"><option value="#07111f" selected>Midnight</option><option value="#006b83">Ocean cyan</option><option value="#000000">Black</option><option value="#174b2b">Forest</option></select></div>
+</div>
+<button class="primary" id="generate">✦ Generate QR code</button>
+<div class="actions"><button class="secondary" id="clear" type="button">Clear</button><button class="secondary" id="example" type="button">Try example</button></div>
+<p class="status" id="status" role="status" aria-live="polite">Your QR code will appear on the right.</p>
+</section>
+<section class="card preview">
+<strong>YOUR QR PREVIEW</strong>
+<div class="qrbox"><div id="qrcode"><div class="placeholder">Your QR code will appear here</div></div></div>
+<div class="status" id="previewStatus">Ready when you are.</div>
+<a class="download secondary" id="download" hidden download="zivo-qr.png">↓ Download PNG</a>
+</section>
+</div>
+</main>
+<footer>© AURA ZIVO · Zivo QR · Your text stays in this browser.</footer>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" referrerpolicy="no-referrer"></script>
+<script>
+const content = document.getElementById('content');
+const size = document.getElementById('size');
+const color = document.getElementById('color');
+const output = document.getElementById('qrcode');
+const status = document.getElementById('status');
+const previewStatus = document.getElementById('previewStatus');
+const download = document.getElementById('download');
+
+function generateQR(){
+  const text = content.value.trim();
+  if(!text){status.textContent='Please enter some text or a website link first.';content.focus();return;}
+  if(typeof QRCode === 'undefined'){
+    status.textContent='QR library could not load. Check your internet connection and reload the page.';
+    return;
+  }
+  output.replaceChildren();
+  try{
+    new QRCode(output,{text,width:Number(size.value),height:Number(size.value),colorDark:color.value,colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
+    status.textContent='QR code created. Scan it with your phone camera to test it.';
+    previewStatus.textContent='Ready to download.';
+    setTimeout(()=>{
+      const image=output.querySelector('img');
+      const canvas=output.querySelector('canvas');
+      const data=image?.src || canvas?.toDataURL('image/png');
+      if(data){download.href=data;download.hidden=false;}
+    },150);
+  }catch(error){
+    status.textContent='Could not create that QR code. Try shorter text.';
+    previewStatus.textContent='Try again with shorter text.';
+  }
+}
+document.getElementById('generate').addEventListener('click',generateQR);
+document.getElementById('clear').addEventListener('click',()=>{
+  content.value='';output.innerHTML='<div class="placeholder">Your QR code will appear here</div>';
+  status.textContent='Cleared. Enter new text when ready.';previewStatus.textContent='Ready when you are.';download.hidden=true;content.focus();
+});
+document.getElementById('example').addEventListener('click',()=>{
+  content.value='https://zivo-shophelper.netlify.app/';
+  generateQR();
+});
+size.addEventListener('change',()=>{if(content.value.trim())generateQR();});
+color.addEventListener('change',()=>{if(content.value.trim())generateQR();});
+content.addEventListener('keydown',(event)=>{if((event.ctrlKey||event.metaKey)&&event.key==='Enter')generateQR();});
+</script>
+</body>
+</html>
